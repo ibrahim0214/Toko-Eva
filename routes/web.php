@@ -17,6 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

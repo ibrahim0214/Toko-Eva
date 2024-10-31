@@ -24,20 +24,34 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required',
-            'harga' => 'required | numeric'
+            'harga' => 'required | numeric',
+            'foto' => 'required | image | mimes:jpeg,png,jpg'
+            
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         };
 
+
+        $foto = $request->file('foto');
+        $foto->storeAs('public', $foto->hashName());
+        
+
         Product::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
+            'foto' => $foto->hashName()
         ]);
 
-        return redirect()->route('products.index')->with('succes', 'Add Product Success');
+        return redirect()->route('products.index')->with('success', 'Add Product Success');
             
+    }
+
+
+    public function edit(Product $product) 
+    {
+        return view('products.edit', compact('product'));
     }
 }
