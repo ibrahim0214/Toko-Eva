@@ -1,13 +1,15 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 px-3">
 
-        <div class="flex mt-6">
+        <div class="flex mt-6 justify-between items-center">
             <h2 class="font-semibold text-xl">Edit Product</h2>
+            @include('products.partials.delete-product')
         </div> 
 
         <div class="mt-4" x-data="{ imageUrl: '/storage/{{ $product->foto }}'}">
-            <form enctype="multipart/form-data" method="POST" action="{{ route('products.store') }}" class="flex gap-8">
+            <form enctype="multipart/form-data" method="POST" action="{{ route('products.update', $product->id) }}" class="flex gap-8">
                 @csrf
+                @method('PUT')
                 
                 <div class="w-1/2">   
                     <img :src="imageUrl" class="rounded-md"/>
@@ -15,8 +17,9 @@
                 <div class="w-1/2">
                     <div class="mt-4">
                         <x-input-label for="foto" :value="__('Foto')" />
-                        <x-text-input accept="image/*" id="foto" class="block mt-1 w-full border p-2" type="file" name="foto" :value="$product->foto" required 
-                        @change ="imageUrl = URL.createObjectURL($event.target.files[0])" />
+                        <x-text-input accept="image/*" id="foto" class="block mt-1 w-full border p-2" 
+                        type="file" name="foto" :value="$product->foto" 
+                        @change="imageUrl = URL.createObjectURL($event.target.files[0])" />
                         <x-input-error :messages="$errors->get('foto')" class="mt-2" />
                     </div>
 
@@ -28,7 +31,7 @@
     
                     <div class="mt-4">
                         <x-input-label for="harga" :value="__('Harga')" />
-                        <x-text-input id="Harga" class="block mt-1 w-full" type="text   " name="harga" :value="$product->harga" required />
+                        <x-text-input id="Harga" class="block mt-1 w-full" type="text   " name="harga" :value="$product->harga"  x-mask:dynamic="$money($input, ',')" required />
                         <x-input-error :messages="$errors->get('harga')" class="mt-2" />
                     </div>
     
